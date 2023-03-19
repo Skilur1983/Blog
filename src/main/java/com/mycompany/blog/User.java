@@ -12,10 +12,9 @@ public class User {
     
     private String email;
     private String name;
+    private String post;
 
-    public User(String email, String name) {
-        this.email = email;
-        this.name = name;
+    public User() {
     }
 
     public String getEmail() {
@@ -33,6 +32,12 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }    
 }
