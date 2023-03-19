@@ -47,7 +47,11 @@
                     <tr>
                         <td><label for="email">Email</label></td>
                         <td><input id="email" type="text" name="email"></td>
-                    </tr>               
+                    </tr>
+                    <tr>
+                        <td><label for="post">Post</label></td>
+                        <td><input id="post" type="text" name="post"></td>
+                    </tr>      
                 </tbody>
             </table>
             <input type="submit" name="send" value="Send">
@@ -62,12 +66,14 @@
             <table class="list">
                 <tr>
                     <th>Name</th>                  
-                    <th>Email</th>                    
+                    <th>Email</th>     
+                    <th>Post</th>
                 </tr>
                 <c:forEach var="user" items="${users}">
                     <tr>
                         <td><c:out value="${user.getEmail()}"/></td>
-                        <td><c:out value="${user.getName()}"/></td>                        
+                        <td><c:out value="${user.getName()}"/></td>    
+                        <td><c:out value="${user.getPost()}"/></td>
                     </tr>
                 </c:forEach>
             </table>

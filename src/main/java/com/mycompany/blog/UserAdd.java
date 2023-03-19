@@ -46,10 +46,11 @@ public class UserAdd extends HttpServlet {
             session.setAttribute("users", users);
         }
         
-        if(request.getParameter("name") != "" || request.getParameter("email") != ""){
+        if(request.getParameter("name") != "" || request.getParameter("email") != "" || request.getParameter("post") != ""){
             User user = (User)factory.getBean("User");
             user.setName(request.getParameter("name"));
             user.setEmail(request.getParameter("email"));
+            user.setPost(request.getParameter("post"));
             users.add(user);
         }
         response.sendRedirect("index.jsp");
