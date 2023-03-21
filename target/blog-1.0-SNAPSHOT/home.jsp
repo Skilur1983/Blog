@@ -71,8 +71,8 @@
                 </tr>
                 <c:forEach var="user" items="${users}">
                     <tr>
-                        <td><c:out value="${user.getEmail()}"/></td>
-                        <td><c:out value="${user.getName()}"/></td>    
+                        <td><c:out value="${user.getName()}"/></td>
+                        <td><c:out value="${user.getEmail()}"/></td>    
                         <td><c:out value="${user.getPost()}"/></td>
                     </tr>
                 </c:forEach>
