@@ -46,7 +46,7 @@ public class UserAdd extends HttpServlet {
         PrintWriter pw = null;
         try{
             pw = response.getWriter();
-            Class.forName("com.postgres.jdbs.Driver");
+            Class.forName("org.postgresql.Driver");
         } catch(ClassNotFoundException ex) {
             ex.printStackTrace(pw);
             pw.print(ex.getMessage());
@@ -54,9 +54,9 @@ public class UserAdd extends HttpServlet {
         
         Connection conn = null;
         try{
-            conn = DriverManager.getConnection("jdbc:postgres://localhost:5432/postgres", "postgres", "456321");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "456321");
             if (request.getParameter("email") != null){
-                PreparedStatement ps = conn.prepareStatement("INSERT INTO POSTS (user_name, email, post)" + "VALUES(?, ?, ?)");
+                PreparedStatement ps = conn.prepareStatement("INSERT INTO users.posts(user_name, email, post) VALUES" + "(?, ?, ?);");
                 ps.setString(1, request.getParameter("name"));
                 ps.setString(2, request.getParameter("email"));
                 ps.setString(3, request.getParameter("post"));
@@ -65,7 +65,7 @@ public class UserAdd extends HttpServlet {
             }
             
             Statement s = conn.createStatement();
-            ResultSet rs = s.executeQuery("SELECT * FROM POSTS");
+            ResultSet rs = s.executeQuery("SELECT * FROM users.posts");
             List<User> users = new LinkedList<User>();
             
             while (rs.next()){
@@ -74,16 +74,7 @@ public class UserAdd extends HttpServlet {
             }
             request.setAttribute("users", users);
             session.setAttribute("users", users);
-            
-            ApplicationContext factory = new ClassPathXmlApplicationContext("/blogSpringXMLConfig.xml");
-            if(request.getParameter("name") != "" || request.getParameter("email") != "" || request.getParameter("post") != ""){
-            User user = (User)factory.getBean("User");
-            user.setName(request.getParameter("name"));
-            user.setEmail(request.getParameter("email"));
-            user.setPost(request.getParameter("post"));
-            users.add(user);
-        }
-        response.sendRedirect("home.jsp");
+            response.sendRedirect("home.jsp");
         } catch (SQLException ex) {
             pw.print(ex.getMessage());
             ex.printStackTrace();

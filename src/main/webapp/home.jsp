@@ -56,11 +56,7 @@
             </table>
             <input type="submit" name="send" value="Send">
         </form>
-        <c:if test="${users.size() > 5}">
-            <<form action="CalculateStats">
-                <input type="submit" name="send2" value="Statistics">
-            </form>
-        </c:if>
+        
         <div id="content">
             <c:if test="${users.size() > 0}">
             <table class="list">
