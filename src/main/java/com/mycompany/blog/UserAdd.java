@@ -6,6 +6,12 @@ package com.mycompany.blog;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -36,25 +42,54 @@ public class UserAdd extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        ApplicationContext factory = new ClassPathXmlApplicationContext("/blogSpringXMLConfig.xml");
-        
         HttpSession session = request.getSession();
-        List<User> users = (List<User>)session.getAttribute("users");
+        PrintWriter pw = null;
+        try{
+            pw = response.getWriter();
+            Class.forName("org.postgresql.Driver");
+        } catch(ClassNotFoundException ex) {
+            ex.printStackTrace(pw);
+            pw.print(ex.getMessage());
+        }
         
-        if(users == null){
-            users = new LinkedList<User>();
+        Connection conn = null;
+        try{
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "456321");
+            if (request.getParameter("email") != null){
+                PreparedStatement ps = conn.prepareStatement("INSERT INTO users.posts(user_name, email, post) VALUES" + "(?, ?, ?);");
+                ps.setString(1, request.getParameter("name"));
+                ps.setString(2, request.getParameter("email"));
+                ps.setString(3, request.getParameter("post"));
+                ps.executeUpdate();
+                response.sendRedirect("./");
+            }
+            
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM users.posts");
+            List<User> users = new LinkedList<User>();
+            
+            while (rs.next()){
+                User u = new User(rs.getString(2), rs.getString(3), rs.getString(4));
+                users.add(u);
+            }
+            request.setAttribute("users", users);
             session.setAttribute("users", users);
+            response.sendRedirect("home.jsp");
+        } catch (SQLException ex) {
+            pw.print(ex.getMessage());
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null){
+                try{
+                    conn.close();
+                } catch (SQLException e) {
+                    e.getMessage();
+                }
+            }
         }
-        
-        if(request.getParameter("name") != "" || request.getParameter("email") != "" || request.getParameter("post") != ""){
-            User user = (User)factory.getBean("User");
-            user.setName(request.getParameter("name"));
-            user.setEmail(request.getParameter("email"));
-            user.setPost(request.getParameter("post"));
-            users.add(user);
-        }
-        response.sendRedirect("index.jsp");
-        
+                
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");

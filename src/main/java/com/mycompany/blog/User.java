@@ -17,6 +17,14 @@ public class User {
     public User() {
     }
 
+    public User(String email, String name, String post) {
+        this.email = email;
+        this.name = name;
+        this.post = post;
+    }
+
+    
+    
     public String getEmail() {
         return email;
     }
