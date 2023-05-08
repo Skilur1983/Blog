@@ -29,4 +29,4 @@ Updating local repo
 2. Pull most recent code version from the remote repo:
 `git fetch <remote-repo>` 
 3. After that run
-`git rebase -i origin master` - this will get the updates and place your changes on top of it
+`git rebase -i origin/main` - this will get the updates and place your changes on top of it
