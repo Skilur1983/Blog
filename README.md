@@ -27,5 +27,6 @@ Updating local repo
 `git branch –delete <feature-branch>` or
 `git branch -d <feature-branch>`
 2. Pull most recent code version from the remote repo:
-`git fetch <remote-repo>` or
-`git pull --rebase origin master` - this will get the updates and place your changes on top of it
+`git fetch <remote-repo>` 
+3. After that run
+`git rebase -i origin master` - this will get the updates and place your changes on top of it
