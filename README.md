@@ -32,7 +32,7 @@ Updating local repo
 `git checkout -b main origin/main` - if there are no updates and you want continue working with the local main from where you stopped
 
 3.1 In case there are changes in your local branch, please commit them via `git add`, `git commit -m "comment"` commands. After that run
-`git rebase --root origin/main` - this will get the updates and place your changes on top of it. 
+`git rebase --root origin/main` - this will get the updates and place your changes on top of it.
 4. To add these changes to the main branch create new branch where all updates from the remote repo will be stored
 5. Switch to the main via `git checkout main`
 6. Merge updates from new branch to main via `git merge <new branch>`
