@@ -12,10 +12,10 @@ Local setup
 Start working
 We're using Release Branching Strategy approach here, so please keep in mind that you should be committing to the release branch first and after release developer branch - main will be updated for further usage. Steps:
 1. Checkout to the feature branch:
-`git checkout <feature-branch-name>`
+`git checkout -b <feature-branch-name>`
 2. Provide updates and commit them to the feature branch:
 `git status` - checks for the update
-`git add <file-name>` / --all` - takes a modified file in your working directory and places the modified version in a staging area.
+`git add <file-name>` / --all - takes a modified file in your working directory and places the modified version in a staging area.
 `git commit <commit-name>` - takes everything from the staging area and makes a permanent snapshot of the current state of your repository that is associated with a unique identifier.
 3. Pushing updates to the remote repo:
 `git push -u <remote repo> <feature-branch>` - using SSH-key or credentials you'll be pushing your updates to the remote repo
