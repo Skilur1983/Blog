@@ -29,4 +29,6 @@ Updating local repo
 2. Pull most recent code version from the remote repo:
 `git fetch <remote-repo>` 
 3. After that run
+`git checkout -b main origin/main` - if there are no updates and you want continue working with the local main from where you stopped
+3.1 In case there are changes in your local branch, please commit them via `git add`, `git commit -m "comment"` commands. After that run
 `git rebase -i origin/main` - this will get the updates and place your changes on top of it
