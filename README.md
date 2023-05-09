@@ -15,7 +15,7 @@ We're using Release Branching Strategy approach here, so please keep in mind tha
 `git checkout -b <feature-branch-name>`
 2. Provide updates and commit them to the feature branch:
 `git status` - checks for the update
-`git add <file-name>` / --all - takes a modified file in your working directory and places the modified version in a staging area.
+`git add <file-name>` / `--all` - takes a modified file in your working directory and places the modified version in a staging area.
 `git commit <commit-name>` - takes everything from the staging area and makes a permanent snapshot of the current state of your repository that is associated with a unique identifier.
 3. Pushing updates to the remote repo:
 `git push -u <remote repo> <feature-branch>` - using SSH-key or credentials you'll be pushing your updates to the remote repo
@@ -27,12 +27,7 @@ Updating local repo
 `git branch –delete <feature-branch>` or
 `git branch -d <feature-branch>`
 2. Pull most recent code version from the remote repo:
-`git fetch <remote-repo>` 
-3. After that run
-`git checkout -b main origin/main` - if there are no updates and you want continue working with the local main from where you stopped
-
-3.1 In case there are changes in your local branch, please commit them via `git add`, `git commit -m "comment"` commands. After that run
-`git rebase --root origin/main` - this will get the updates and place your changes on top of it.
-4. To add these changes to the main branch create new branch where all updates from the remote repo will be stored
-5. Switch to the main via `git checkout main`
-6. Merge updates from new branch to main via `git merge <new branch>`
+`git fetch <remote-repo>/main` 
+3. `git checkout origin/main` to make sure all updates are there
+4. Swith back to the main branch. In case there are changes in your local branch, please commit them via `git add`, `git commit -m "comment"` commands. After that run
+`git rebase origin/main` - this will get the updates and place your changes on top of it.
