@@ -30,15 +30,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @WebServlet(name = "UserAdd", urlPatterns = {"/UserAdd"})
 public class UserAdd extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    String url = "jdbc:postgresql://localhost:5432/postgres";
+    String user = "postgres";
+    String pass = "456321";
+    String sql = "INSERT INTO users.posts(user_name, email, post) VALUES" + "(?, ?, ?);";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -54,9 +49,9 @@ public class UserAdd extends HttpServlet {
         
         Connection conn = null;
         try{
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "456321");
+            conn = DriverManager.getConnection(url, user, pass);
             if (request.getParameter("email") != null){
-                PreparedStatement ps = conn.prepareStatement("INSERT INTO users.posts(user_name, email, post) VALUES" + "(?, ?, ?);");
+                PreparedStatement ps = conn.prepareStatement(sql);
                 ps.setString(1, request.getParameter("name"));
                 ps.setString(2, request.getParameter("email"));
                 ps.setString(3, request.getParameter("post"));
