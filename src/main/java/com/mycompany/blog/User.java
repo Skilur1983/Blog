@@ -23,8 +23,6 @@ public class User {
         this.post = post;
     }
 
-    
-    
     public String getEmail() {
         return email;
     }
