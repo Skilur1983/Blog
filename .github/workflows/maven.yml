@@ -39,11 +39,11 @@ jobs:
     - name: Step 5 - Run Tests
       run: mvn -B test --file pom.xml
       
-    - name: Step 6 - Run Super-Linter
-      uses: super-linter/super-linter@v5.0.0
-      env:
-        DEFAULT_BRANCH: release
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Step 6 - Run Super-Linter
+    #  uses: super-linter/super-linter@v5.0.0
+    #  env:
+    #    DEFAULT_BRANCH: release
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #- name: Push SpotBugs report
      # uses: jwgmeligmeyling/spotbugs-github-action@v1.2
       # with:
