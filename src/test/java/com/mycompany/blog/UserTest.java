@@ -15,7 +15,7 @@ public class UserTest {
     public void testSetEmail() {
         User user = new User();
         user.setEmail("test@example.com");
-        Assertions.assertEquals("tes1t@example.com", user.getEmail());
+        Assertions.assertEquals("test@example.com", user.getEmail());
     }
 
     @Test
