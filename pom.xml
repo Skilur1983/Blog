@@ -12,6 +12,8 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.test.skip>false</maven.test.skip>
+        <project.build.testSourceDirectory>src/test/java/com/mycompany/blog</project.build.testSourceDirectory>
     </properties>
     
     <dependencies>
@@ -159,6 +161,7 @@
     </dependencies>
 
     <build>
+        <testSourceDirectory>src/test/java/com/mycompany/blog</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
