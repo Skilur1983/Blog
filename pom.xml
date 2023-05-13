@@ -159,6 +159,7 @@
     </dependencies>
 
     <build>
+        <testSourceDirectory>src/test/java/com/mycompany/blog</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
