@@ -37,7 +37,7 @@ jobs:
       run: ls -a
       
     - name: Step 5 - Run Tests
-      run: mvn -B test --file pom.xml
+      run: mvn test
       
     #- name: Step 6 - Run Super-Linter
     #  uses: super-linter/super-linter@v5.0.0
