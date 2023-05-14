@@ -8,7 +8,7 @@ public class UserTest {
     @Test
     public void testGetEmail() {
         User user = new User("test@example.com", "John Doe", "Developer");
-        Assertions.assertEquals("test@example.com", user.getEmail());
+        Assertions.assertEquals("test1@example.com", user.getEmail());
     }
 
     @Test
