@@ -4,6 +4,8 @@
  */
 package com.mycompany.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,10 +22,17 @@ public class User {
     private Long id;
     private String email;
     private String name;
+    @JsonIgnore
     private String password;
     private List<Role> roles;
 
     public User() {
+    }
+
+    public User(String email, String password, List<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public User(String email, String name, String password, List<Role> roles) {
