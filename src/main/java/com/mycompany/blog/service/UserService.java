@@ -17,12 +17,12 @@ public class UserService {
     private UserRepository userRepository;
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     public void save(User user){
-        user.setPassword(getPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
         userRepository.save(user);
     }
 

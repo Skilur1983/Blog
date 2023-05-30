@@ -2,25 +2,27 @@ package com.mycompany.blog.pojos;
 
 public class UserRegistrtion {
 
-    private String username;
+    private String email;
+    private String name;
     private String password;
     private String passwordConfirmation;
 
     public UserRegistrtion() {
     }
 
-    public UserRegistrtion(String username, String password, String passwordConfirmation) {
-        this.username = username;
+    public UserRegistrtion(String email, String name, String password, String passwordConfirmation) {
+        this.email = email;
+        this.name = name;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

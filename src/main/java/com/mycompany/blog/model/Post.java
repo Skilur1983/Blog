@@ -2,6 +2,7 @@ package com.mycompany.blog.model;
 
 import javax.persistence.*;
 
+@Entity
 public class Post {
 
     @Id

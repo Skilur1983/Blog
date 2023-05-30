@@ -6,15 +6,15 @@ package com.mycompany.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 /**
  *
  * @author dmitry
  */
+@Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -24,6 +24,7 @@ public class User {
     private String name;
     @JsonIgnore
     private String password;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Role> roles;
 
     public User() {
@@ -39,6 +40,7 @@ public class User {
         this.email = email;
         this.name = name;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {

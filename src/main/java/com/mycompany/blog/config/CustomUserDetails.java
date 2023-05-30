@@ -14,16 +14,26 @@ public class CustomUserDetails implements UserDetails {
 
     private String email;
     private String password;
-    Collection<? extends GrantedAuthority> authorities;
+    private Collection<? extends GrantedAuthority> authorities;
     public CustomUserDetails(User byUserName){
         this.email = byUserName.getEmail();
         this.password = byUserName.getPassword();
-        List<GrantedAuthority> auths = new ArrayList<>();
-        for(Role role : byUserName.getRoles()) {
-            auths.add(new SimpleGrantedAuthority(role.getName()));
-        }
-        this.authorities = auths;
+        this.authorities = translate(byUserName.getRoles());
     }
+
+    private Collection<? extends GrantedAuthority> translate(List<Role> roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            String name = role.getName().toUpperCase();
+            //Make sure that all roles start with "ROLE_"
+            if (!name.startsWith("ROLE_"))
+                name = "ROLE_" + name;
+            authorities.add(new SimpleGrantedAuthority(name));
+        }
+        return authorities;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

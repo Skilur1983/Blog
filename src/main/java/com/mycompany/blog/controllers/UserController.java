@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RestController
 public class UserController {
@@ -21,13 +22,17 @@ public class UserController {
     private TokenStore tokenStore;
 
     @PostMapping(value = "/register")
-    public String register(@RequestBody UserRegistrtion userRegistrtion){
-        if(!userRegistrtion.getPassword().equals(userRegistrtion.getPasswordConfirmation()))
-            return "Passwords don't match";
-        else if (userService.getUser(userRegistrtion.getUsername()) != null)
-            return "User already exists";
+    public String register(@RequestBody UserRegistrtion userRegistration){
+        if(!userRegistration.getPassword().equals(userRegistration.getPasswordConfirmation()))
+            return "Error the two passwords do not match";
+        else if(userService.getUser(userRegistration.getEmail()) != null)
+            return "Error this username already exists";
 
-        userService.save(new User(userRegistrtion.getUsername(), userRegistrtion.getPassword(), Arrays.asList(new Role("User"))));
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+        if(pattern.matcher(userRegistration.getEmail()).find())
+            return "Please use correct email for sign up";
+
+        userService.save(new User(userRegistration.getEmail(), userRegistration.getPassword(), Arrays.asList(new Role("USER"), new Role("ACTUATOR"))));
         return "User created";
     }
 
@@ -41,7 +46,7 @@ public class UserController {
         tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken));
     }
 
-    @GetMapping(value = "/getUsername")
+    @GetMapping(value ="/getUsername")
     public String getUsername(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
