@@ -1,6 +1,7 @@
 package com.mycompany.blog.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 public class Post {
@@ -9,9 +10,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String body;
     @ManyToOne
-    private User creator;
+    @JoinColumn(name = "blogger_id", referencedColumnName = "id", nullable = false)
+    private Blogger creator;
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments;
 
     public long getId() {
         return id;
@@ -37,11 +42,11 @@ public class Post {
         this.body = body;
     }
 
-    public User getCreator() {
+    public Blogger getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(Blogger creator) {
         this.creator = creator;
     }
 }

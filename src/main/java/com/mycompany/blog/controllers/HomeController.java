@@ -1,28 +1,24 @@
 package com.mycompany.blog.controllers;
 
+import com.mycompany.blog.model.Post;
+import com.mycompany.blog.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
 
-    @GetMapping(value="/")
-    public String index(){
-        return "index";
-    }
+    @Autowired
+    private PostService postService;
 
-    @GetMapping(value="/registration")
-    public String register(){
-        return "register";
-    }
-
-    @GetMapping(value="/login")
-    public String login(){
-        return "login";
-    }
-
-    @GetMapping(value="post/{id}")
-    public String singlePost(){
-        return "post";
+    @GetMapping("/")
+    public String home(Model model) {
+        List<Post> posts = postService.getAllPosts();
+        model.addAttribute("posts", posts);
+        return "home";
     }
 }

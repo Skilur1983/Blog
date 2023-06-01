@@ -5,44 +5,44 @@
 package com.mycompany.blog.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author dmitry
  */
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "bloggers")
+public class Blogger {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String email;
-    private String name;
     @JsonIgnore
     private String password;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Role> roles;
+    @OneToMany(mappedBy = "creator")
+    private List<Post> posts;
+    @OneToMany(mappedBy = "creator")
+    private List<Comment> comments;
 
-    public User() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "blogger_authority",
+            joinColumns = {@JoinColumn(name = "blogger_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+    private Set<Authority> authorities = new HashSet<>();
+    public Blogger() {
     }
 
-    public User(String email, String password, List<Role> roles) {
+    public Blogger(String email, String password) {
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
-
-    public User(String email, String name, String password, List<Role> roles) {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.roles = roles;
-    }
-
     public Long getId() {
         return id;
     }
@@ -59,14 +59,6 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -75,11 +67,11 @@ public class User {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }

@@ -1,6 +1,6 @@
 package com.mycompany.blog.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Comment {
@@ -10,13 +10,15 @@ public class Comment {
     private Long id;
     private String text;
     @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
     private Post post;
     @ManyToOne
-    private User creator;
+    @JoinColumn(name = "blogger_id", referencedColumnName = "id", nullable = false)
+    private Blogger creator;
 
     public Comment(){}
 
-    public Comment(String text, Post post, User creator) {
+    public Comment(String text, Post post, Blogger creator) {
         this.text = text;
         this.post = post;
         this.creator = creator;
@@ -46,11 +48,11 @@ public class Comment {
         this.post = post;
     }
 
-    public User getCreator() {
+    public Blogger getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(Blogger creator) {
         this.creator = creator;
     }
 }

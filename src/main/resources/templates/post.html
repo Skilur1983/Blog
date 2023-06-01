@@ -1,79 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/header :: header('A post')" />
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog :: Post</title>
+</head>
 <body>
-<div id="root">
-    <div th:replace="fragments/nav :: nav"></div>
     <div class="container">
-        <div class="row">
-            <div class="twelve columns">
-                <h1>My blog</h1>
-                <ul>
-                    <li v-if="post">
-                        <h3>{{post.title}}</h3>
-                        <h6>Created by : {{post.creator.username}}</h6>
-                        <p>{{post.body}}</p>
-                        <hr />
-                    </li>
-                </ul>
-                <div class="comments">
-                    <h2>Comments</h2>
-                    <ul>
-                        <li v-for="comment in comments">
-                            <h6>Posted by : <b>{{comment.creator.username}}</b></h6>
-                            <p>{{comment.text}}</p>
-                        </li>
-                    </ul>
-                </div>
-                <div v-if="isLoggedIn()">
-                    <label for="comment">Add a Comment</label>
-                    <textarea v-model="commentText" class="u-full-width" placeholder="Comment.." id="comment"></textarea>
-                    <input class="u-full-width button-primary" type="submit" v-on:click="doComment" value="Submit" />
-                </div>
+        <a th:href="@{/}">Home</a>
+        <div class="post">
+            <h2 th:text="${post.title}">Title</h2>
+            <p th:text="${post.body}">body text</p>
+        </div>
+        <div class="comments-container">
+            <div class="comment" th:each="comment : ${comments}">
+                <h2><a th:href="@{'/comments/' + ${comment.id}}" th:text="${comment.body}">Title</a></h2>
+                <h5 th:text="'Written by ' + ${comment.bloger.username}">Bloger</h5>
+                <p th:text="${post.body}">body text</p>
+                <br>
             </div>
         </div>
+        <ul sec:authorize="isAuthenticated()">
+            <li><a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a></li>
+            <li><a th:href="@{'/posts/' + ${post.id} + '/delete'}">Delete</a></li>
+            <li><a th:href="@{'/posts/' + ${post.id} + '/comment'}">Comment</a></li>
+        </ul>
     </div>
-</div>
+
 </body>
-<div th:replace="fragments/footer :: foot"></div>
-
-<script>
-    var app = new Vue({
-        el: '#root',
-        data : {post: null, commentText: '', comments: []},
-        created(){
-            this.fetchPosts();
-            this.fetchComments();
-        },
-        methods: {
-            fetchPosts(){
-                axios.get("/the_post/" + this.getPostId()).then(function(response){
-                    this.post = response.data;
-                }.bind(this));
-            },
-            isLoggedIn(){
-                return window.Event.isLoggedIn;
-            },
-            doComment(){
-                axios({
-                    method:'post',
-                    url:'postComment?access_token=' + getCookie("access_token"),
-                    data:{text:this.commentText,postId:this.post.id}
-                }).then(function(response){
-                    this.fetchComments();
-                }.bind(this));
-            },
-            fetchComments(){
-                axios.get("/comments/" + this.getPostId()).then(function(response){
-                    this.comments = response.data;
-                }.bind(this));
-            },
-            getPostId(){
-                var splitted = window.location.href.split('/');
-                return splitted[splitted.length-1];
-            }
-        }
-
-    });
-</script>
 </html>
