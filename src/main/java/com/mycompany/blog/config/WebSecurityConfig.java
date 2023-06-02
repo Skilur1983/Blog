@@ -23,8 +23,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/rss/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
-                        .requestMatchers("/posts/**").permitAll()
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .requestMatchers("/posts/**", "/comments/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

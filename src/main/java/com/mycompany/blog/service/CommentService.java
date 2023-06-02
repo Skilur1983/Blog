@@ -13,6 +13,8 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private PostService postService;
 
     public Optional<Comment> getCommentById(Long commentId) {
         return commentRepository.findById(commentId);
@@ -22,8 +24,12 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public List<Comment> getAllPosts() {
+    public List<Comment> getAllComments() {
         return commentRepository.findAll();
+    }
+
+    public List<Comment> getAllCommentsByPostId(Long postId){
+        return commentRepository.findAllById(postService.getPostIdByPostId(postId));
     }
 
     public Comment save(Comment comment) {

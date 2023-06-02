@@ -10,4 +10,10 @@ public class LoginController {
 
         return "login";
     }
+
+    @GetMapping("/account")
+    public String getAccount() {
+
+        return "account";
+    }
 }

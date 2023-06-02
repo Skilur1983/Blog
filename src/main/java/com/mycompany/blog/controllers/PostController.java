@@ -1,7 +1,9 @@
 package com.mycompany.blog.controllers;
 
 import com.mycompany.blog.model.Blogger;
+import com.mycompany.blog.model.Comment;
 import com.mycompany.blog.model.Post;
+import com.mycompany.blog.service.CommentService;
 import com.mycompany.blog.service.PostService;
 import com.mycompany.blog.service.BloggerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -23,6 +26,9 @@ public class PostController {
     @Autowired
     private BloggerService bloggerService;
 
+    @Autowired
+    private CommentService commentService;
+
     @GetMapping("/posts/{id}")
     public String getPost(@PathVariable Long id, Model model) {
 
@@ -33,6 +39,8 @@ public class PostController {
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
             model.addAttribute("post", post);
+            List<Comment> comments = commentService.getAllCommentsByPostId(id);
+            model.addAttribute("comments", comments);
             return "post";
         } else {
             return "404";

@@ -17,16 +17,15 @@
         </div>
         <div class="comments-container">
             <div class="comment" th:each="comment : ${comments}">
-                <h2><a th:href="@{'/comments/' + ${comment.id}}" th:text="${comment.body}">Title</a></h2>
-                <h5 th:text="'Written by ' + ${comment.bloger.username}">Bloger</h5>
-                <p th:text="${post.body}">body text</p>
+                <p th:href="@{'/comments/' + ${comment.id}}" th:text="${comment.text}">Comment</p>
+                <h5 th:text="'Written by ' + ${comment.creator.email}">Blogger</h5>
                 <br>
             </div>
         </div>
         <ul sec:authorize="isAuthenticated()">
             <li><a th:href="@{'/posts/' + ${post.id} + '/edit'}">Edit</a></li>
             <li><a th:href="@{'/posts/' + ${post.id} + '/delete'}">Delete</a></li>
-            <li><a th:href="@{'/posts/' + ${post.id} + '/comment'}">Comment</a></li>
+            <li><a th:href="@{'/posts/' + ${post.id} + '/comments/new'}">Comment</a></li>
         </ul>
     </div>
 
