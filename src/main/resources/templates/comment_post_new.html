@@ -13,15 +13,14 @@
         <p th:text="${post.body}">body text</p>
     </div>
     <form action="#"
-          th:action="@{'/posts/{postId}/comments/new'}"
+          th:action="@{'/posts/'+${post.id} +'/comments/new'}"
           th:object="${comment}"
           method="post">
-        <input type="hidden" th:field="*{comment.creator}" />
-        <input type="hidden" th:field="*{comment.post}" />
+<!--        <input type="hidden" th:field="*{creator}" />-->
         <h2>Write new Comment</h2>
         <div>
             <label for="comment">Comment</label>
-            <input id="comment" type="text" th:field="*{comment.text}" placeholder="Comment"/>
+            <input id="comment" type="text" th:field="*{text}" placeholder="Comment"/>
         </div>
         <button type="submit">Publish Comment</button>
     </form>

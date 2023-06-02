@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BloggerRepository extends JpaRepository<Blogger, Long> {
     Optional<Blogger> findUserByEmail(String email);
+    Blogger findUserById(Long id);
 }

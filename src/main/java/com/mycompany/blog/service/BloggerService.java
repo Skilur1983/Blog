@@ -42,4 +42,8 @@ public class BloggerService {
         return bloggerRepository.findUserByEmail(email);
     }
 
+    public Blogger findOneById(Long id) {
+        return bloggerRepository.findUserById(id);
+    }
+
 }

@@ -2,13 +2,15 @@ package com.mycompany.blog.controllers;
 
 import com.mycompany.blog.model.Blogger;
 import com.mycompany.blog.model.Comment;
+import com.mycompany.blog.model.Post;
 import com.mycompany.blog.service.BloggerService;
 import com.mycompany.blog.service.CommentService;
+import com.mycompany.blog.service.PostService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,9 @@ public class CommentController {
     @Autowired
     private BloggerService bloggerService;
 
+    @Autowired
+    private PostService postService;
+
     @GetMapping("/posts/{postId}/comments/{id}")
     public String getComment(@PathVariable Long id, Model model) {
 
@@ -40,54 +45,33 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/posts/{postId}/comments/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable Long id, Comment comment, BindingResult result, Model model) {
-
-        Optional<Comment> optionalComment = commentService.getCommentById(id);
-        if (optionalComment.isPresent()) {
-            Comment existingComment = optionalComment.get();
-
-            existingComment.setText(comment.getText());
-
-            commentService.save(existingComment);
-        }
-
-        return "redirect:/posts/{postId}" + comment.getId();
-    }
-
     @GetMapping("/posts/{postId}/comments/new")
-    @PreAuthorize("isAuthenticated()")
-    public String createNewPost(Model model, Principal principal) {
+    public String navigateToCommentPage(@PathVariable("postId")Long postId, Model model, Principal principal){
 
-        String authUsername = "anonymousUser";
-        if (principal != null) {
-            authUsername = principal.getName();
-        }
-
-        Optional<Blogger> optionalAccount = bloggerService.findOneByEmail(authUsername);
-        if (optionalAccount.isPresent()) {
-            Comment comment = new Comment();
-            comment.setCreator(optionalAccount.get());
-            model.addAttribute("comment", comment);
-            return "/posts/{postId}";
-        } else {
-            return "redirect:/posts/{postId}";
-        }
+        Optional<Post> optionalPost = postService.getPostById(postId);
+        if(optionalPost.isPresent())
+            model.addAttribute("post", optionalPost.get());
+        else
+            return "404";
+        return "comment_post_new";
     }
+
 
     @PostMapping("/posts/{postId}/comments/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNewPost(@ModelAttribute Comment comment, Principal principal) {
+    public String createNewComment(@PathVariable("postId")Long postId, @ModelAttribute ("comment") Comment newComment, Principal principal) {
+
         String authUsername = "anonymousUser";
         if (principal != null) {
             authUsername = principal.getName();
         }
-        if (comment.getCreator().getEmail().compareToIgnoreCase(authUsername) < 0) {
-            return "Email on the Comment is not equal to current logged in account!";
-        }
+
+        Comment comment = new Comment();
+        comment.setCreator(bloggerService.findOneByEmail(principal.getName()).get());
+        comment.setPost(postService.getPostById(postId).get());
+        comment.setText(newComment.getText());
         commentService.save(comment);
-        return "redirect:/posts/{postID}" + comment.getId();
+            return "redirect:/posts/" + postId;
     }
 
     @GetMapping("/posts/{postId}/comments/{id}/delete")
