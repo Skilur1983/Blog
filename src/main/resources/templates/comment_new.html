@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog :: Comment Post</title>
+</head>
+<body>
+    <div class="container">
+        <a th:href="@{/}">Home</a>
+        <form action="#"
+              th:action="@{'/posts/'+${postId}+'/comments/new'}"
+              th:object="${comment}"
+              method="post">
+            <input type="hidden" th:field="*{blogger}" />
+            <input type="hidden" th:field="*{post}">
+            <h2>Comment a Post</h2>
+            <div>
+                <label for="new-comment-body">comment</label>
+                <textarea id="new-comment-body" th:field="*{commentBody}"></textarea>
+            </div>
+            <button type="submit">Publish comment</button>
+        </form>
+    </div>
+</body>
+</html>
