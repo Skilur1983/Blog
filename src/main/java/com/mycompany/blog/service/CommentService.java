@@ -20,14 +20,6 @@ public class CommentService {
         return commentRepository.findById(commentId);
     }
 
-    public void comment(Comment comment) {
-        commentRepository.save(comment);
-    }
-
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
-    }
-
     public List<Comment> getAllCommentsByPostId(Long postId){
         return commentRepository.findAllById(postService.getPostIdByPostId(postId));
     }

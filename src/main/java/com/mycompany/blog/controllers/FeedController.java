@@ -1,6 +1,8 @@
 package com.mycompany.blog.controllers;
 
+import com.mycompany.blog.model.Comment;
 import com.mycompany.blog.model.Post;
+import com.mycompany.blog.service.CommentService;
 import com.mycompany.blog.service.PostService;
 import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Description;
@@ -8,6 +10,7 @@ import com.rometools.rome.feed.rss.Item;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,6 +23,8 @@ public class FeedController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping(path = "/rss")
     public Channel rssFeed(HttpServletRequest request) {

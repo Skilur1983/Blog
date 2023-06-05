@@ -13,7 +13,7 @@
           th:action="@{'/posts/{id}'(id=${post.id})}"
           th:object="${post}"
           method="post">
-        <input type="hidden" th:field="*{creator}" />
+        <input type="hidden" th:field="*{blogger}" />
         <h2>Update Post</h2>
         <div>
             <label for="new-post-title">Title</label>

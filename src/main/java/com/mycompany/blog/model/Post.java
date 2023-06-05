@@ -1,12 +1,16 @@
 package com.mycompany.blog.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Post {
 
     @Id
@@ -17,7 +21,7 @@ public class Post {
     private String body;
     @ManyToOne
     @JoinColumn(name = "blogger_id", referencedColumnName = "id", nullable = false)
-    private Blogger creator;
+    private Blogger blogger;
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 

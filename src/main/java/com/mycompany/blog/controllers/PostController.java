@@ -29,17 +29,17 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/posts/{id}")
-    public String getPost(@PathVariable Long id, Model model) {
+    @GetMapping("/posts/{postId}")
+    public String getPost(@PathVariable Long postId, Model model) {
 
         // find post by id
-        Optional<Post> optionalPost = this.postService.getPostById(id);
+        Optional<Post> optionalPost = this.postService.getPostById(postId);
 
         // if post exists put it in model
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
             model.addAttribute("post", post);
-            List<Comment> comments = commentService.getAllCommentsByPostId(id);
+            List<Comment> comments = commentService.getAllCommentsByPostId(postId);
             model.addAttribute("comments", comments);
             return "post";
         } else {
@@ -47,11 +47,11 @@ public class PostController {
         }
     }
 
-    @PostMapping("/posts/{id}")
+    @PostMapping("/posts/{postId}")
     @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable Long id, Post post, BindingResult result, Model model) {
+    public String updatePost(@PathVariable Long postId, Post post, BindingResult result, Model model) {
 
-        Optional<Post> optionalPost = postService.getPostById(id);
+        Optional<Post> optionalPost = postService.getPostById(postId);
         if (optionalPost.isPresent()) {
             Post existingPost = optionalPost.get();
 
@@ -61,7 +61,7 @@ public class PostController {
             postService.save(existingPost);
         }
 
-        return "redirect:/posts/" + post.getId();
+        return "redirect:/posts/" + postId;
     }
 
     @GetMapping("/posts/new")
@@ -73,10 +73,10 @@ public class PostController {
             authUsername = principal.getName();
         }
 
-        Optional<Blogger> optionalAccount = bloggerService.findOneByEmail(authUsername);
-        if (optionalAccount.isPresent()) {
+        Optional<Blogger> optionalBlogger = bloggerService.findOneByEmail(authUsername);
+        if (optionalBlogger.isPresent()) {
             Post post = new Post();
-            post.setCreator(optionalAccount.get());
+            post.setBlogger(optionalBlogger.get());
             model.addAttribute("post", post);
             return "post_new";
         } else {
@@ -91,7 +91,7 @@ public class PostController {
         if (principal != null) {
             authUsername = principal.getName();
         }
-        if (post.getCreator().getEmail().compareToIgnoreCase(authUsername) < 0) {
+        if (post.getBlogger().getEmail().compareToIgnoreCase(authUsername) < 0) {
             // TODO: some kind of error?
             // our account email on the Post not equal to current logged in account!
         }

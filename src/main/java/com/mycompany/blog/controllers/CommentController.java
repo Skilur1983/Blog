@@ -6,7 +6,6 @@ import com.mycompany.blog.model.Post;
 import com.mycompany.blog.service.BloggerService;
 import com.mycompany.blog.service.CommentService;
 import com.mycompany.blog.service.PostService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,61 +30,71 @@ public class CommentController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/posts/{postId}/comments/{id}")
-    public String getComment(@PathVariable Long id, Model model) {
+    @GetMapping("/comments/{id}")
+    public String getComment(@PathVariable Long commentId, Model model) {
 
-        Optional<Comment> optionalComment = this.commentService.getCommentById(id);
+        Optional<Comment> optionalComment = this.commentService.getCommentById(commentId);
 
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
             model.addAttribute("comment", comment);
-            return "/posts/{postId}";
+            return "comment";
         } else {
             return "404";
         }
     }
 
     @GetMapping("/posts/{postId}/comments/new")
-    public String navigateToCommentPage(@PathVariable("postId")Long postId, Model model, Principal principal){
-
-        Optional<Post> optionalPost = postService.getPostById(postId);
-        if(optionalPost.isPresent())
-            model.addAttribute("post", optionalPost.get());
-        else
-            return "404";
-        return "comment_post_new";
-    }
-
-
-    @PostMapping("/posts/{postId}/comments/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNewComment(@PathVariable("postId")Long postId, @ModelAttribute ("comment") Comment newComment, Principal principal) {
+    public String createNewComment(@PathVariable Long postId, Model model, Principal principal) {
 
         String authUsername = "anonymousUser";
         if (principal != null) {
             authUsername = principal.getName();
         }
 
-        Comment comment = new Comment();
-        comment.setCreator(bloggerService.findOneByEmail(principal.getName()).get());
-        comment.setPost(postService.getPostById(postId).get());
-        comment.setText(newComment.getText());
-        commentService.save(comment);
-            return "redirect:/posts/" + postId;
+        Optional<Blogger> optionalBlogger = bloggerService.findOneByEmail(authUsername);
+        Optional<Post> optionalPost = postService.getPostById(postId);
+        if (optionalBlogger.isPresent()) {
+            Comment comment = new Comment();
+            comment.setBlogger(optionalBlogger.get());
+            comment.setPost(optionalPost.get());
+            model.addAttribute("comment", comment);
+            return "comment_new";
+        } else {
+            return "redirect:/";
+        }
     }
 
-    @GetMapping("/posts/{postId}/comments/{id}/delete")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deleteComments(@PathVariable Long id) {
+    @PostMapping("/posts/{postId}/comments/new")
+    @PreAuthorize("isAuthenticated()")
+    public String createNewComment(@ModelAttribute Comment comment, @PathVariable Long postId, Principal principal) {
+        String authUsername = "anonymousUser";
+        if (principal != null) {
+            authUsername = principal.getName();
+        }
+        if (comment.getBlogger().getEmail().compareToIgnoreCase(authUsername) < 0) {
+            // TODO: some kind of error?
+            // our Blogger email on the Post not equal to current logged in Blogger!
+        }
+        commentService.save(comment);
+        return "redirect:/posts/" + postId;
+    }
 
+    @GetMapping("/comments/{id}/delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String deleteComment(@PathVariable Long id) {
+
+        // find post by id
         Optional<Comment> optionalComment = commentService.getCommentById(id);
         if (optionalComment.isPresent()) {
             Comment comment = optionalComment.get();
 
             commentService.delete(comment);
-            return "redirect:/posts/{postId}";
+            return "redirect:/";
         } else {
             return "404";
         }
     }
+
 }

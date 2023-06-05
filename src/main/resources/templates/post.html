@@ -17,8 +17,8 @@
         </div>
         <div class="comments-container">
             <div class="comment" th:each="comment : ${comments}">
-                <p th:href="@{'/comments/' + ${comment.id}}" th:text="${comment.text}">Comment</p>
-                <h5 th:text="'Written by ' + ${comment.creator.email}">Blogger</h5>
+                <p><a th:href="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id}}" th:text="${comment.commentBody}">Comment</a></p>
+                <h5 th:text="'Written by ' + ${comment.blogger.email}">Blogger</h5>
                 <br>
             </div>
         </div>
